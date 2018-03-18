@@ -77,17 +77,20 @@ public final class SQLiteDatabase extends SQLiteCloseable {
      * @param table Name of table
      * @param values {@link ContentValues}
      */
-    public void insert(String table, ContentValues values) {
+    public int insert(String table, ContentValues values) {
         acquireReference();
         try {
+            int ret = 0;
             final String SQL = builder.createInsert(table, values);
-            this.statement.executeUpdate(SQL);
+            ret = this.statement.executeUpdate(SQL);
             this.connection.commit();
+            return ret;
         } catch (SQLException ex) {
             Log.wtf(this, ex);
         } finally {
             releaseReference();
         }
+        return 0;
     }
 
     /**
@@ -96,17 +99,19 @@ public final class SQLiteDatabase extends SQLiteCloseable {
      * @param values {@link ContentValues}
      * @param selection Where clause
      */
-    public void update(String table, ContentValues values, String selection) {
+    public int update(String table, ContentValues values, String selection) {
         acquireReference();
         try {
             final String SQL = builder.createUpdate(table, values, selection);
-            this.statement.executeUpdate(SQL);
+            int res = this.statement.executeUpdate(SQL);
             this.connection.commit();
+            return res;
         } catch (SQLException ex) {
             Log.wtf(this, ex);
         } finally {
             releaseReference();
         }
+        return 0;
     }
 
     /**
@@ -114,17 +119,19 @@ public final class SQLiteDatabase extends SQLiteCloseable {
      * @param table Name of table
      * @param selection Where clause
      */
-    public void delete(String table, String selection) {
+    public int delete(String table, String selection) {
         acquireReference();
         try {
             final String SQL = builder.createDelete(table, selection);
-            this.statement.executeUpdate(SQL);
+            int res = this.statement.executeUpdate(SQL);
             this.connection.commit();
+            return res;
         } catch (SQLException ex) {
             Log.wtf(this, ex);
         } finally {
             releaseReference();
         }
+        return 0;
     }
 
     /**
