@@ -39,11 +39,13 @@ import java.io.File;
 public abstract class SQLiteOpenHelper implements Closeable {
     private SQLiteDatabase database;
     private int version;
+    private String dbPath;
     private String name;
 
 
-    public SQLiteOpenHelper(String dbName, int version) {
+    public SQLiteOpenHelper(String dbPath,String dbName, int version) {
         this.name = (dbName.contains(".db") ? dbName : dbName.concat(".db"));
+        this.dbPath = dbPath;
         this.version = version;
     }
 
@@ -74,12 +76,12 @@ public abstract class SQLiteOpenHelper implements Closeable {
      */
     public SQLiteDatabase getWritableInstance() {
         if (database == null) {
-            File file = new File(name);
+            File file = new File(dbPath,name);
             boolean alreadyExists = file.exists();
 
             // This creates our SQLite database file for us, so check if it
             // already exists before this call.
-            this.database = new SQLiteDatabase(name);
+            this.database = new SQLiteDatabase(file.getAbsolutePath());
 
             // Check if the database file already exists
             if (alreadyExists) {
