@@ -51,8 +51,13 @@ public abstract class SQLiteOpenHelper implements Closeable {
 
     @Override
     public void close() {
-        if (database != null) {
-            this.database.close();
+        try {
+            if (this.database != null) {
+                this.database.close();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            // Nothing..
         }
     }
 
