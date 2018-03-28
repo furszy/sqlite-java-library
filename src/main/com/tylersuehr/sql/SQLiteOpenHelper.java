@@ -56,7 +56,6 @@ public abstract class SQLiteOpenHelper implements Closeable {
                 this.database.close();
             }
         }catch (Exception e){
-            e.printStackTrace();
             // Nothing..
         }
     }
