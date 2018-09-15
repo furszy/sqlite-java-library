@@ -1,6 +1,8 @@
 package com.tylersuehr.sql;
 import java.io.Closeable;
 import java.io.File;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Copyright 2017 Tyler Suehr
@@ -42,7 +44,6 @@ public abstract class SQLiteOpenHelper implements Closeable {
     private String dbPath;
     private String name;
 
-
     public SQLiteOpenHelper(String dbPath,String dbName, int version) {
         this.name = (dbName.contains(".db") ? dbName : dbName.concat(".db"));
         this.dbPath = dbPath;
@@ -78,7 +79,7 @@ public abstract class SQLiteOpenHelper implements Closeable {
      * Lazy-loads our SQLite database and ensures that only one instance is available.
      * @return {@link SQLiteDatabase}
      */
-    public SQLiteDatabase getWritableInstance() {
+    public synchronized SQLiteDatabase getWritableInstance() {
         if (database == null) {
             File file = new File(dbPath,name);
             boolean alreadyExists = file.exists();
