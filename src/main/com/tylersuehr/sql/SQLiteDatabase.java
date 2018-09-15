@@ -139,11 +139,12 @@ public final class SQLiteDatabase extends SQLiteCloseable {
      * @param sql SQL query
      * @return {@link ResultSet}
      */
-    public ResultSet rawQuery(String sql) {
+    public synchronized ResultSet rawQuery(String sql) {
         acquireReference();
         try {
             return statement.executeQuery(sql);
         } catch (SQLException ex) {
+            ex.printStackTrace();
             Log.wtf(this, ex);
             return null;
         } finally {
